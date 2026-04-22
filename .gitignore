@@ -26,6 +26,18 @@ fix_static.py
 diag_static.py
 check.py
 push_github.py
+check_le_status.py
+diagnose_not_secure.py
+enable_le_airwatch102.py
+enforce_p4thweather_https.py
+fix_dns_retry_le.py
+fix_nginx_both_domains.py
+get_letsencrypt_http01.py
+le_airwatch102.py
+letsencrypt_setup.py
+retry_le_issue.py
+run_le_once.py
+tail_le_log.py
 
 # VS Code
 .vscode/
