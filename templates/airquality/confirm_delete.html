@@ -1,0 +1,25 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}Confirmer la suppression — AirWatch{% endblock %}
+
+{% block content %}
+<div class="form-page" style="margin-top:80px;">
+    <div class="form-card">
+        <h2 style="color:var(--accent)">Confirmer la suppression</h2>
+        <p style="margin-bottom:24px;color:#ccc;">
+            Voulez-vous vraiment supprimer {{ type }} <strong style="color:white">{{ object }}</strong> ?
+            Cette action est irréversible.
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-actions">
+                <button type="submit" class="btn" style="background:var(--accent);color:white;padding:10px 24px;border-radius:4px;border:none;cursor:pointer;font-weight:700">
+                    Oui, supprimer
+                </button>
+                <a href="{% url 'airquality:admin_dashboard' %}" class="btn btn-outline">Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

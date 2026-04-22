@@ -1,0 +1,71 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}Sources — AirWatch Europe{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <div style="position:relative; z-index:2; max-width:1400px; margin:0 auto; padding: 40px 20px;">
+        <div class="section-tag">// Open Data</div>
+        <h1>SOURCES &amp;<br><em>RÉFÉRENCES</em></h1>
+        <p>Données officielles et organismes de surveillance de la qualité de l'air en Europe</p>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<section class="section">
+    <div class="section-tag">// Données officielles</div>
+    <h2>NOS SOURCES<br>DE DONNÉES</h2>
+    
+    <div class="sources-grid">
+        {% for source in sources %}
+        <div class="source-card">
+            <div class="source-type-badge">{{ source.get_source_type_display }}</div>
+            <h3>{{ source.name }}</h3>
+            <p>{{ source.description }}</p>
+            <a href="{{ source.url }}" target="_blank" class="btn-link">Consulter la source →</a>
+            <div class="source-meta">
+                <small>Dernière mise à jour: {{ source.last_update|date:"d/m/Y H:i" }}</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-tag">// Références</div>
+    <h2>DIRECTIVES &amp;<br>NORMES</h2>
+    
+    <div class="references-grid">
+        <div class="ref-card">
+            <h4>Directive Air Quality (2008/50/CE)</h4>
+            <p>Définit les limites de qualité de l'air ambiant et les obligations de surveillance pour les États membres.</p>
+        </div>
+        
+        <div class="ref-card">
+            <h4>Normes OMS 2021</h4>
+            <p>Nouvelles recommandations pour les limites d'exposition sûres aux polluants atmosphériques.</p>
+        </div>
+        
+        <div class="ref-card">
+            <h4>Green Deal Européen</h4>
+            <p>Objectif de réduction de 55% des décès prématurés liés à la pollution d'ici 2030.</p>
+        </div>
+        
+        <div class="ref-card">
+            <h4>Réseau EIONET</h4>
+            <p>Réseau européen de mesure avec 2500+ stations coordonnées par l'AEE.</p>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-tag">// À propos</div>
+    <h2>COMMENT UTILISER<br>CES DONNÉES</h2>
+    
+    <p>AirWatch Europe est une plateforme open data qui agrège les mesures officielles de qualité de l'air de toute l'Europe. Les données proviennent directement des agences gouvernementales et organisations reconnues internationalement.</p>
+    
+    <p><strong>Licence:</strong> Ces données sont disponibles sous licence open data (CC-BY ou domaine public selon la source). Vous pouvez les réutiliser librement à titre professionnel ou personnel.</p>
+</section>
+{% endblock %}

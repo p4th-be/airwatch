@@ -1,0 +1,111 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}AirWatch Europe — Qualité de l'Air{% endblock %}
+
+{% block content %}
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div style="position:relative; z-index:2;">
+        <div class="hero-tag">⬡ European Environment Agency · OpenData · 2026</div>
+        <h1>L'AIR QUE<br>NOUS <em>RESPIRONS</em></h1>
+        <p class="hero-sub">Surveillance en temps réel de la qualité de l'air en Europe. Données officielles, analyses scientifiques, et impact sur la santé publique.</p>
+        <div class="hero-cta">
+            <a href="{% url 'airquality:data' %}" class="btn btn-primary">→ Voir les données</a>
+            <a href="{% url 'airquality:map' %}" class="btn btn-outline">Carte interactive</a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-num">{{ stats.premature_deaths|stringformat:'s' }}</div>
+                <div class="hero-stat-label">Décès prématurés/an<br>en Europe (PM2.5)</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">{{ stats.active_stations }}</div>
+                <div class="hero-stat-label">Stations de mesure<br>actives en Europe</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">{{ stats.monitored_countries }}0+</div>
+                <div class="hero-stat-label">Pays surveillés<br>par l'AEE</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-num">-{{ stats.pm25_reduction }}%</div>
+                <div class="hero-stat-label">Réduction PM2.5<br>depuis 2000</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- INTRO SECTION -->
+<section class="section">
+    <div class="section-tag">// Introduction</div>
+    <h2>COMPRENDRE<br>L'ENJEU</h2>
+    <p class="section-lead">La pollution de l'air est la première cause environnementale de mortalité prématurée en Europe. L'Agence Européenne pour l'Environnement (AEE) collecte et publie en open data des milliers de mesures quotidiennes.</p>
+
+    <div class="cards-grid">
+        <div class="card">
+            <div class="card-num">01 / POLLUANTS</div>
+            <h3>PM2.5 & PM10</h3>
+            <p>Les particules fines sont les polluants les plus dangereux. Elles pénètrent profondément dans les poumons et atteignent la circulation sanguine, causant maladies cardiovasculaires et respiratoires.</p>
+        </div>
+        <div class="card">
+            <div class="card-num">02 / SOURCES</div>
+            <h3>Origines multiples</h3>
+            <p>Trafic routier, industrie, agriculture, chauffage résidentiel : les sources de pollution sont nombreuses et varient selon les régions et les saisons, avec des pics hivernaux fréquents.</p>
+        </div>
+        <div class="card">
+            <div class="card-num">03 / MESURE</div>
+            <h3>Réseau Européen</h3>
+            <p>Le réseau EIONET coordonne plus de 2500 stations de mesure à travers l'Europe, transmettant leurs données en temps réel à la base AirBase accessible en open data.</p>
+        </div>
+        <div class="card">
+            <div class="card-num">04 / OBJECTIF</div>
+            <h3>Zéro Pollution 2030</h3>
+            <p>Le Green Deal européen fixe un objectif de réduction de 55% des décès prématurés liés à la pollution atmosphérique d'ici 2030, aligné sur les nouvelles normes OMS de 2021.</p>
+        </div>
+    </div>
+</section>
+
+<!-- LATEST DATA -->
+<section class="section">
+    <div class="section-tag">// Données récentes</div>
+    <h2>DERNIÈRES<br>MESURES</h2>
+    <p class="section-lead">
+        Les 10 dernières mesures enregistrées dans nos stations
+        <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+        <span class="last-updated" id="last-updated"></span>
+    </p>
+
+    <div class="data-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Station</th>
+                    <th>Polluant</th>
+                    <th>Valeur</th>
+                    <th>Limite OMS</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="live-data-tbody">
+                {% for measurement in latest_data %}
+                <tr {% if measurement.value > measurement.pollutant.limit_oms %}class="row-over-limit"{% endif %}>
+                    <td>{{ measurement.station.name }}</td>
+                    <td>{{ measurement.pollutant.symbol }}</td>
+                    <td>{{ measurement.value|floatformat:1 }} {{ measurement.unit }}</td>
+                    <td>{{ measurement.pollutant.limit_oms|floatformat:1 }} {{ measurement.unit }}</td>
+                    <td>{{ measurement.measurement_date|date:"d/m/Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/charts.js' %}"></script>
+{% endblock %}

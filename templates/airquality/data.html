@@ -1,0 +1,100 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}Données & Statistiques — AirWatch Europe{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div style="position:relative; z-index:2; max-width:1400px; margin:0 auto;">
+        <div class="section-tag">// Base AirBase EEA · OpenData</div>
+        <h1>DONNÉES &<br><em>STATISTIQUES</em></h1>
+        <p>Mesures officielles de concentration des polluants atmosphériques pour les principales villes européennes, extraites de la base de données AirBase de l'AEE.</p>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- POLLUANTS -->
+<section class="section">
+    <div class="section-tag">// Les polluants surveillés</div>
+    <h2>QUELS<br>POLLUANTS ?</h2>
+    <p class="section-lead">L'AEE surveille 6 polluants principaux définis par la directive 2008/50/CE sur la qualité de l'air ambiant.</p>
+
+    <div class="pollutant-grid">
+        {% for pollutant in pollutants %}
+        <div class="pollutant-item">
+            <div class="pollutant-symbol">{{ pollutant.symbol }}</div>
+            <div class="pollutant-name">{{ pollutant.name }}</div>
+            <div class="pollutant-desc">{{ pollutant.description }}</div>
+            <div class="pollutant-limits">
+                <small>Limite OMS: {{ pollutant.limit_oms }} {{ pollutant.unit }}</small>
+                {% if pollutant.limit_eu %}
+                <small>Limite UE: {{ pollutant.limit_eu }} {{ pollutant.unit }}</small>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- STATISTIQUES PAR POLLUANT -->
+<section class="section">
+    <div class="section-tag">// Niveau de pollution annuel</div>
+    <h2>STATISTIQUES<br>PAR POLLUANT</h2>
+    <p class="section-lead">
+        <span class="live-badge"><span class="live-dot"></span> LIVE</span>
+        <span class="last-updated" id="last-updated-stats"></span>
+    </p>
+    <div class="stats-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Polluant</th>
+                    <th>Valeur moyenne</th>
+                    <th>Maximum</th>
+                    <th>Minimum</th>
+                </tr>
+            </thead>
+            <tbody id="live-stats-tbody">
+                {% for stat in pollutant_stats %}
+                <tr>
+                    <td>{{ stat.pollutant.symbol }} - {{ stat.pollutant.name }}</td>
+                    <td>{{ stat.avg|floatformat:1 }} μg/m³</td>
+                    <td>{{ stat.max|floatformat:1 }} μg/m³</td>
+                    <td>{{ stat.min|floatformat:1 }} μg/m³</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- VILLES -->
+<section class="section">
+    <div class="section-tag">// Villes surveillées</div>
+    <h2>PRINCIPALES<br>VILLES</h2>
+    <p class="section-lead">Les plus grandes métropoles européennes en surveillance</p>
+
+    <div class="cities-grid">
+        {% for city in cities %}
+        <div class="city-card">
+            <div class="city-card-header">
+                <h3>{{ city.name }}</h3>
+                <span class="city-country">{{ city.country.name }}</span>
+            </div>
+            <div class="city-info">
+                <p>{{ city.population|default:"N/A" }} habitants</p>
+                <p>{{ city.stations.count }} stations actives</p>
+            </div>
+            <a href="{% url 'airquality:city_detail' city.id %}" class="btn-link">Voir les détails →</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/charts.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

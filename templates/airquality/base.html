@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AirWatch Europe — Qualité de l'Air{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <a class="nav-logo" href="{% url 'airquality:index' %}">Air<span>Watch</span></a>
+        <ul class="nav-links">
+            <li><a href="{% url 'airquality:index' %}" {% if request.resolver_match.url_name == 'index' %}class="active"{% endif %}>Accueil</a></li>
+            <li><a href="{% url 'airquality:data' %}" {% if request.resolver_match.url_name == 'data' %}class="active"{% endif %}>Données</a></li>
+            <li><a href="{% url 'airquality:map' %}" {% if request.resolver_match.url_name == 'map' %}class="active"{% endif %}>Carte</a></li>
+            <li><a href="{% url 'airquality:impacts' %}" {% if request.resolver_match.url_name == 'impacts' %}class="active"{% endif %}>Impacts</a></li>
+            <li><a href="{% url 'airquality:sources' %}" {% if request.resolver_match.url_name == 'sources' %}class="active"{% endif %}>Sources</a></li>
+            <li><a href="{% url 'airquality:evaluations' %}" {% if request.resolver_match.url_name == 'evaluations' %}class="active"{% endif %}>Évaluations</a></li>
+            {% if user.is_staff %}
+            <li><a href="{% url 'airquality:admin_dashboard' %}" class="nav-admin-link {% if 'admin-panel' in request.path %}active{% endif %}">⚙ Admin</a></li>
+            {% endif %}
+        </ul>
+        <div class="nav-auth">
+            {% if user.is_authenticated %}
+                <span class="nav-user">{{ user.username }}</span>
+                <form method="post" action="{% url 'airquality:logout' %}" style="display:inline">
+                    {% csrf_token %}
+                    <button type="submit" class="nav-logout-btn">Déconnexion</button>
+                </form>
+            {% else %}
+                <a href="{% url 'airquality:login' %}" class="nav-login-btn">Connexion Admin</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+{% if messages %}
+<div class="messages-container">
+    {% for msg in messages %}
+    <div class="message message-{{ msg.tags }}">{{ msg }}</div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; 2026 AirWatch Europe - Données officielles EEA, Copernicus, OpenAQ</p>
+        <p>Sources: <a href="https://www.eea.europa.eu/" target="_blank">European Environment Agency</a> | <a href="https://atmosphere.copernicus.eu/" target="_blank">Copernicus</a> | <a href="https://openaq.org/" target="_blank">OpenAQ</a></p>
+    </div>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>

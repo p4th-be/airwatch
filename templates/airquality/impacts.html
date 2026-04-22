@@ -1,0 +1,85 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}Impacts Sanitaires — AirWatch Europe{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <div style="position:relative; z-index:2; max-width:1400px; margin:0 auto; padding: 40px 20px;">
+        <div class="section-tag">// Santé publique · OMS</div>
+        <h1>IMPACTS<br><em>SANITAIRES</em></h1>
+        <p>Effets de la pollution atmosphérique sur la santé des Européens</p>
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<section class="section">
+    <div class="section-tag">// Mortalité attribuée</div>
+    <h2>{{ total_deaths|stringformat:'s' }} DÉCÈS<br>PAR AN EN EUROPE</h2>
+    <p class="section-lead">Décès prématurés attribuables à la pollution atmosphérique selon l'OMS et l'EEA</p>
+
+    <div class="health-grid">
+        {% for impact in health_impacts %}
+        <div class="health-card">
+            <div class="health-header">
+                <div class="pollutant-badge">{{ impact.pollutant.symbol }}</div>
+                <h3>{{ impact.disease }}</h3>
+            </div>
+            
+            <p>{{ impact.description }}</p>
+            
+            <div class="health-stats">
+                <div class="stat">
+                    <div class="stat-value">{{ impact.annual_deaths_europe|default:"N/A" }}</div>
+                    <div class="stat-label">Décès/an estimés</div>
+                </div>
+            </div>
+            
+            <div class="vulnerable">
+                <strong>Groupes vulnérables:</strong>
+                <p>{{ impact.vulnerable_groups }}</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <div class="section-tag">// Prévention</div>
+    <h2>RÉDUIRE L'EXPOSITION</h2>
+    <p class="section-lead">Conseils pratiques pour protéger votre santé</p>
+
+    <div class="actions-grid">
+        <div class="action-card">
+            <h3>🏠 À la maison</h3>
+            <ul>
+                <li>Utiliser des purificateurs d'air</li>
+                <li>Vérifier l'indice de qualité de l'air</li>
+                <li>Aérer aux heures creuses</li>
+                <li>Maintenir une bonne hygiène</li>
+            </ul>
+        </div>
+        
+        <div class="action-card">
+            <h3>🚴 En déplacement</h3>
+            <ul>
+                <li>Favoriser modes doux (vélo, marche)</li>
+                <li>Eviter zones très polluées</li>
+                <li>Minimiser temps d'attente véhicules</li>
+                <li>Utiliser masques si nécessaire</li>
+            </ul>
+        </div>
+        
+        <div class="action-card">
+            <h3>🏃 Sport & loisirs</h3>
+            <ul>
+                <li>Vérifier indice de pollution avant sortie</li>
+                <li>Éviter heures de pointe</li>
+                <li>Zones vertes moins polluées</li>
+                <li>Adapter activité selon conditions</li>
+            </ul>
+        </div>
+    </div>
+</section>
+{% endblock %}

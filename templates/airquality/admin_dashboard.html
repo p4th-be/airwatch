@@ -1,0 +1,175 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}Tableau de bord Admin — AirWatch{% endblock %}
+
+{% block content %}
+<div class="admin-page">
+    <h1 class="admin-title">⚙ Tableau de bord Administrateur</h1>
+
+    <!-- Stats -->
+    <div class="admin-stats-grid">
+        <div class="admin-stat-card">
+            <div class="admin-stat-num">{{ cities_count }}</div>
+            <div class="admin-stat-label">Villes</div>
+        </div>
+        <div class="admin-stat-card">
+            <div class="admin-stat-num">{{ measurements_count }}</div>
+            <div class="admin-stat-label">Mesures</div>
+        </div>
+        <div class="admin-stat-card">
+            <div class="admin-stat-num">{{ pollutants_count }}</div>
+            <div class="admin-stat-label">Polluants</div>
+        </div>
+        <div class="admin-stat-card">
+            <div class="admin-stat-num">{{ evaluations_count }}</div>
+            <div class="admin-stat-label">Évaluations</div>
+        </div>
+    </div>
+
+    <!-- Cities -->
+    <div class="admin-section">
+        <div class="admin-section-header">
+            <span class="admin-section-title">Villes</span>
+            <a href="{% url 'airquality:city_add' %}" class="btn-add">+ Ajouter</a>
+        </div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ville</th><th>Pays</th><th>Population</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for city in cities %}
+                    <tr>
+                        <td><a href="{% url 'airquality:city_detail' city.pk %}" style="color:var(--secondary)">{{ city.name }}</a></td>
+                        <td>{{ city.country }}</td>
+                        <td>{{ city.population|default:"—" }}</td>
+                        <td>
+                            <a href="{% url 'airquality:city_edit' city.pk %}" class="btn-edit">Modifier</a>
+                            <a href="{% url 'airquality:city_delete' city.pk %}" class="btn-delete" style="margin-left:6px">Supprimer</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="4" style="color:#666">Aucune ville enregistrée.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Pollutants -->
+    <div class="admin-section">
+        <div class="admin-section-header">
+            <span class="admin-section-title">Polluants</span>
+            <a href="{% url 'airquality:pollutant_add' %}" class="btn-add">+ Ajouter</a>
+        </div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Symbole</th><th>Nom</th><th>Limite OMS</th><th>Unité</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in pollutants %}
+                    <tr>
+                        <td>{{ p.symbol }}</td>
+                        <td>{{ p.name }}</td>
+                        <td>{{ p.limit_oms }}</td>
+                        <td>{{ p.unit }}</td>
+                        <td>
+                            <a href="{% url 'airquality:pollutant_edit' p.pk %}" class="btn-edit">Modifier</a>
+                            <a href="{% url 'airquality:pollutant_delete' p.pk %}" class="btn-delete" style="margin-left:6px">Supprimer</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="5" style="color:#666">Aucun polluant.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Measurements -->
+    <div class="admin-section">
+        <div class="admin-section-header">
+            <span class="admin-section-title">Mesures récentes</span>
+            <a href="{% url 'airquality:measurement_add' %}" class="btn-add">+ Ajouter</a>
+        </div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Station</th><th>Polluant</th><th>Valeur</th><th>Date</th><th>Valide</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in recent_measurements %}
+                    <tr>
+                        <td>{{ m.station.name }}</td>
+                        <td>{{ m.pollutant.symbol }}</td>
+                        <td>{{ m.value }} {{ m.unit }}</td>
+                        <td>{{ m.measurement_date|date:"d/m/Y H:i" }}</td>
+                        <td>{% if m.is_valid %}<span style="color:var(--primary)">✓</span>{% else %}<span style="color:var(--accent)">✗</span>{% endif %}</td>
+                        <td>
+                            <a href="{% url 'airquality:measurement_edit' m.pk %}" class="btn-edit">Modifier</a>
+                            <a href="{% url 'airquality:measurement_delete' m.pk %}" class="btn-delete" style="margin-left:6px">Supprimer</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" style="color:#666">Aucune mesure.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Evaluations moderation -->
+    <div class="admin-section">
+        <div class="admin-section-header">
+            <span class="admin-section-title">Évaluations</span>
+        </div>
+        <div class="data-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Auteur</th><th>Note</th><th>Commentaire</th><th>Date</th><th>Approuvée</th><th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ev in evaluations %}
+                    <tr>
+                        <td>{{ ev.author_name }}</td>
+                        <td>{{ ev.rating }}/5</td>
+                        <td style="max-width:300px">{{ ev.comment|truncatechars:80 }}</td>
+                        <td>{{ ev.created_at|date:"d/m/Y" }}</td>
+                        <td>
+                            <form method="post" action="{% url 'airquality:evaluation_toggle' ev.pk %}" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="{% if ev.is_approved %}btn-edit{% else %}btn-delete{% endif %}">
+                                    {% if ev.is_approved %}Visible{% else %}Masquée{% endif %}
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="post" action="{% url 'airquality:evaluation_delete' ev.pk %}" style="display:inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn-delete" onclick="return confirm('Supprimer ?')">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" style="color:#666">Aucune évaluation.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="margin-top:16px">
+        <a href="/admin/" class="btn btn-outline" target="_blank">Ouvrir l'admin Django →</a>
+    </div>
+</div>
+{% endblock %}

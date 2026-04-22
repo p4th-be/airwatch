@@ -1,0 +1,39 @@
+# Environment
+.env
+*.env
+
+# Database
+db.sqlite3
+*.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+venv/
+env/
+.venv/
+
+# Scripts de déploiement temporaires
+deploy_fix.py
+add_columns.py
+deploy_remote.sh
+start_public.py
+setup_https.py
+finish_https.py
+fix_static.py
+diag_static.py
+check.py
+push_github.py
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+django.log
+
+# OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,81 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}{{ city.name }} — AirWatch Europe{% endblock %}
+
+{% block content %}
+<div class="page-hero">
+    <div style="position:relative; z-index:2; max-width:1400px; margin:0 auto; padding: 40px 20px;">
+        <div class="section-tag">// {{ city.country.name }}</div>
+        <h1>{{ city.name|upper }}<br><em>QUALITÉ DE L'AIR</em></h1>
+        {% if city.description %}
+        <p>{{ city.description }}</p>
+        {% endif %}
+    </div>
+</div>
+
+<div class="divider"></div>
+
+<section class="section">
+    <div class="city-header">
+        <div class="city-info">
+            {% if city.image_url %}
+            <img src="{{ city.image_url }}" alt="{{ city.name }}" class="city-image">
+            {% endif %}
+            <div>
+                <h2>{{ city.name }}</h2>
+                <p><strong>Population:</strong> {{ city.population|default:"N/A" }} habitants</p>
+                <p><strong>Pays:</strong> {{ city.country.name }}</p>
+                <p><strong>Coordonnées:</strong> {{ city.latitude|floatformat:4 }}, {{ city.longitude|floatformat:4 }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <h2>STATIONS DE MESURE</h2>
+    <div class="stations-detail-grid">
+        {% for station in stations %}
+        <div class="station-detail-card">
+            <h3>{{ station.name }}</h3>
+            <p>Altitude: {{ station.altitude }} m</p>
+            <p>Statut: <span class="status-badge {% if station.is_active %}active{% else %}inactive{% endif %}">
+                {% if station.is_active %}Active{% else %}Inactive{% endif %}
+            </span></p>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="section">
+    <h2>DERNIÈRES MESURES</h2>
+    <div class="measurements-table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Station</th>
+                    <th>Polluant</th>
+                    <th>Valeur</th>
+                    <th>Limite OMS</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for measurement in latest_measurements %}
+                <tr>
+                    <td>{{ measurement.station.name }}</td>
+                    <td>{{ measurement.pollutant.symbol }}</td>
+                    <td>{{ measurement.value|floatformat:1 }} μg/m³</td>
+                    <td>{{ measurement.pollutant.limit_oms|floatformat:1 }} μg/m³</td>
+                    <td>{{ measurement.measurement_date|date:"d/m/Y H:i" }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="no-data">Aucune mesure disponible</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

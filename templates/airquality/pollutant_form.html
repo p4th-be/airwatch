@@ -1,0 +1,27 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}{{ action }} un polluant — AirWatch{% endblock %}
+
+{% block content %}
+<div class="form-page">
+    <div class="form-card">
+        <h2>{{ action }} un polluant{% if object %} : {{ object.symbol }}{% endif %}</h2>
+        <form method="post">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+                {% if field.help_text %}<small style="color:#666;font-size:11px">{{ field.help_text }}</small>{% endif %}
+            </div>
+            {% endfor %}
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">{{ action }}</button>
+                <a href="{% url 'airquality:admin_dashboard' %}" class="btn btn-outline">Annuler</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

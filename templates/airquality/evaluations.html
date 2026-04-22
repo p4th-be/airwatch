@@ -1,0 +1,115 @@
+{% extends 'airquality/base.html' %}
+{% load static %}
+
+{% block title %}Évaluations — AirWatch{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="section-tag">// Avis utilisateurs</div>
+    <h2>ÉVALUATIONS<br>DE LA PLATEFORME</h2>
+    <p class="section-lead">Partagez votre expérience avec AirWatch Europe et consultez les avis de la communauté.</p>
+
+    <!-- Summary -->
+    <div class="eval-summary">
+        <div>
+            <div class="eval-summary-num">{{ avg_rating }}</div>
+            <div class="eval-summary-label">Note moyenne</div>
+            <div style="color:#ffd700;font-size:22px;margin-top:4px">
+                {% for i in "12345" %}{% if forloop.counter <= avg_rating %}★{% else %}☆{% endif %}{% endfor %}
+            </div>
+        </div>
+        <div>
+            <div class="eval-summary-num">{{ total }}</div>
+            <div class="eval-summary-label">Évaluation{{ total|pluralize }}</div>
+        </div>
+    </div>
+
+    <!-- Submit form -->
+    <div style="margin: 40px 0; max-width: 600px;">
+        <h3 style="font-size:18px; margin-bottom:20px; color:var(--secondary);">LAISSER UNE ÉVALUATION</h3>
+        <form method="post" style="background:rgba(255,255,255,0.03);border:1px solid rgba(0,232,176,0.15);border-radius:10px;padding:28px;">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.author_name.id_for_label }}">{{ form.author_name.label }}</label>
+                {{ form.author_name }}
+                {% if form.author_name.errors %}<ul class="errorlist">{% for e in form.author_name.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label>Note</label>
+                <div class="star-rating-js" id="star-picker">
+                    <span class="star-btn" data-value="1">★</span>
+                    <span class="star-btn" data-value="2">★</span>
+                    <span class="star-btn" data-value="3">★</span>
+                    <span class="star-btn" data-value="4">★</span>
+                    <span class="star-btn" data-value="5">★</span>
+                </div>
+                <input type="hidden" name="rating" id="rating-value" value="{{ form.rating.value|default:'' }}">
+                {% if form.rating.errors %}<ul class="errorlist">{% for e in form.rating.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+
+            <div class="form-group">
+                <label for="{{ form.comment.id_for_label }}">{{ form.comment.label }}</label>
+                {{ form.comment }}
+                {% if form.comment.errors %}<ul class="errorlist">{% for e in form.comment.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="margin-top:8px;">Envoyer l'évaluation</button>
+        </form>
+    </div>
+
+    <!-- Evaluations list -->
+    {% if evaluations %}
+    <h3 style="font-size:18px; margin-bottom:4px; color:var(--secondary);">AVIS PUBLIÉS</h3>
+    <div class="eval-grid">
+        {% for ev in evaluations %}
+        <div class="eval-card">
+            <div class="eval-header">
+                <span class="eval-author">{{ ev.author_name }}</span>
+                <span class="eval-date">{{ ev.created_at|date:"d/m/Y" }}</span>
+            </div>
+            <div class="eval-stars">
+                {% for i in "12345" %}{% if forloop.counter <= ev.rating %}★{% else %}☆{% endif %}{% endfor %}
+            </div>
+            <p class="eval-comment">{{ ev.comment }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="color:#666;margin-top:20px;">Aucune évaluation pour l'instant. Soyez le premier !</p>
+    {% endif %}
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+(function() {
+    var stars = document.querySelectorAll('#star-picker .star-btn');
+    var input = document.getElementById('rating-value');
+
+    function setRating(val) {
+        input.value = val;
+        stars.forEach(function(s, i) {
+            s.style.color = (i < val) ? '#ffd700' : '#888';
+        });
+    }
+
+    // Init from existing value (e.g. form re-render on error)
+    if (input.value) setRating(parseInt(input.value));
+
+    stars.forEach(function(star) {
+        star.addEventListener('click', function() {
+            setRating(parseInt(this.dataset.value));
+        });
+        star.addEventListener('mouseenter', function() {
+            var val = parseInt(this.dataset.value);
+            stars.forEach(function(s, i) { s.style.color = (i < val) ? '#ffd700' : '#888'; });
+        });
+        star.addEventListener('mouseleave', function() {
+            setRating(input.value ? parseInt(input.value) : 0);
+        });
+    });
+})();
+</script>
+{% endblock %}
