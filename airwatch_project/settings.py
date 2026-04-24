@@ -17,6 +17,17 @@ ALLOWED_HOSTS = [h.strip() for h in _allowed.split(',') if h.strip()]
 # Accepter automatiquement les domaines ngrok et Render
 ALLOWED_HOSTS += ['.ngrok-free.app', '.ngrok-free.dev', '.ngrok.io', '.onrender.com', '.duckdns.org']
 
+# CSRF trusted origins for public HTTPS access (DuckDNS + forwarded port)
+_csrf = os.getenv(
+    'CSRF_TRUSTED_ORIGINS',
+    'https://airwatch102.duckdns.org,https://p4thweather.duckdns.org,https://airwatch102.duckdns.org:60202,https://p4thweather.duckdns.org:60202'
+)
+CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf.split(',') if o.strip()]
+
+# Behind nginx reverse proxy: trust forwarded protocol/host
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

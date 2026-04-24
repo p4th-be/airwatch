@@ -1,0 +1,1057 @@
+RAPPORT COMPLET
+Devoir intégré – Transformation d’un site web statique en site web dynamique
+Projet : AirWatch – surveillance de la qualité de l’air en Europe
+
+Nom : Belgeonne
+Prénom : Baptiste
+Classe : 5e
+Cours : Informatique
+Professeur : Similon
+Date : 24-04-26
+
+Image de couverture : capture de la page d’accueil du site et capture du tableau de bord admin.
+
+====================================================================
+INTRODUCTION
+====================================================================
+
+Pour ce devoir intégré, j’ai choisi de travailler sur un site consacré à la qualité de l’air en Europe. Le sujet m’a semblé intéressant parce qu’il touche à la santé, à l’environnement et aux données publiques. Aujourd’hui, la pollution atmosphérique est un problème réel qui concerne beaucoup de personnes, mais les données restent souvent dispersées, techniques ou difficiles à comprendre pour un public non spécialiste. Mon objectif a donc été de créer un site capable de rendre ces informations plus lisibles, plus visuelles et plus utiles.
+
+Le public cible de mon site est assez large. Je vise d’abord les citoyens qui veulent comprendre la qualité de l’air dans certaines villes, mais aussi les élèves, les enseignants et les personnes qui s’intéressent aux questions de santé publique et d’écologie. Je voulais que le site soit informatif, visuel et relativement simple à parcourir, sans tomber dans un design trop vide ou trop scolaire.
+
+L’objectif principal du site est de centraliser et présenter des données liées à la qualité de l’air, aux polluants, aux stations de mesure, aux impacts sanitaires et aux sources de données utilisées. Je voulais aussi aller plus loin qu’un simple site vitrine, en ajoutant une partie dynamique avec une gestion administrateur, des formulaires, des évaluations utilisateurs et une publication accessible en ligne.
+
+Au tout début du projet, j’ai commencé en mode Python simple, avec des scripts pour comprendre les données, faire des essais rapides et vérifier la logique de traitement. Cette étape m’a servi de base pour tester mes idées sans complexité de framework. Ensuite, quand le projet est devenu plus grand (pages multiples, authentification, base relationnelle, administration, publication), je suis passé sur Django pour avoir une architecture propre et durable.
+
+Ce sujet se prête très bien à l’utilisation de données open data parce qu’il existe des plateformes publiques qui fournissent de vraies mesures environnementales exploitables. Dans mon projet, je me suis appuyé surtout sur des données issues d’OpenAQ et sur des références liées à la qualité de l’air en Europe. Ce choix me permettait de relier un besoin concret à une base de données réelle et de construire un projet crédible, documentable et évolutif.
+
+====================================================================
+PARTIE 1 – CREATION DU SITE WEB STATIQUE MODERNE
+====================================================================
+
+A. Présentation du sujet
+
+Le thème choisi est la qualité de l’air en Europe. Je voulais créer un site moderne qui présente les grandes informations utiles autour de la pollution atmosphérique : les principaux polluants, les villes concernées, les stations de mesure, les conséquences sanitaires et les sources de données publiques.
+
+Le public visé est composé :
+- des citoyens qui veulent comprendre les enjeux de la pollution de l’air ;
+- des élèves ou professeurs qui cherchent un exemple de site informatif basé sur des données réelles ;
+- des personnes intéressées par l’environnement et la santé publique.
+
+Les objectifs du site étaient les suivants :
+- créer une interface agréable et moderne ;
+- expliquer clairement ce que représentent les données ;
+- proposer une navigation simple ;
+- rendre possible une évolution vers un site dynamique administrable.
+
+Les rubriques prévues dans le site sont :
+- accueil ;
+- données ;
+- carte ;
+- impacts sanitaires ;
+- sources ;
+- détail d’une ville.
+
+Le type d’informations affichées comprend notamment :
+- le nombre de stations actives ;
+- le nombre de pays et de villes suivies ;
+- les principaux polluants ;
+- des mesures récentes ;
+- des informations sur les maladies liées à la pollution ;
+- les sources de données utilisées.
+
+B. Recherche et choix des données open data
+
+La source open data principale retenue est OpenAQ.
+
+Producteur des données : OpenAQ
+Lien : https://openaq.org/
+Format des données : API / JSON / données structurées exploitables dans une application web
+Date de consultation : 24/04/2026
+Utilité dans le projet : récupération et exploitation de mesures de qualité de l’air liées à différentes stations et polluants.
+
+Pourquoi cette source est pertinente :
+- les données sont réelles et ouvertes ;
+- elles correspondent exactement au sujet de mon site ;
+- elles permettent de créer un projet à la fois visuel et technique ;
+- elles sont adaptées à une transformation en site dynamique.
+
+Les données utilisées dans le site concernent principalement :
+- les polluants ;
+- les stations de mesure ;
+- les villes ;
+- les valeurs de concentration ;
+- les dates de mesure ;
+- les sources de données.
+
+Pour comprendre la structure des données, j’ai observé les relations entre les entités principales. Par exemple, une ville appartient à un pays, une station appartient à une ville, une mesure appartient à une station et à un polluant. Cette logique relationnelle a été très utile ensuite pour le passage vers Django et vers la base de données.
+
+C. Références visuelles et design 2026
+
+Pour le design, je voulais quelque chose de moderne, propre et lisible, avec une impression sérieuse mais pas triste. J’ai privilégié un style assez clair avec de grands blocs, des cartes visuelles, une hiérarchie nette de l’information, un contraste correct et une navigation simple.
+
+Mes choix visuels :
+- palette inspirée du bleu, du vert et de tons liés à l’environnement ;
+- sections larges avec respiration ;
+- cartes et statistiques bien visibles ;
+- mise en page pensée pour être lisible sur desktop et mobile ;
+- structure assez nette pour éviter l’effet “mur de texte”.
+
+Ce qui rend, selon moi, le design moderne “2026” :
+- une interface aérée ;
+- des blocs d’information bien découpés ;
+- une navigation claire ;
+- un contenu orienté usage réel ;
+- une cohérence entre esthétique et utilité.
+
+Captures intégrées dans le document :
+- capture de la page d’accueil ;
+- capture d’une page intérieure ;
+- capture mobile si possible ;
+- capture du CSS ou de la structure des templates.
+
+D. Arborescence du site
+
+Arborescence prévue puis mise en place :
+- Accueil
+- Données
+- Carte
+- Impacts sanitaires
+- Sources
+- Détail d’une ville
+- Connexion admin
+- Tableau de bord admin
+- Evaluations utilisateurs
+
+Rôle des pages :
+- Accueil : présenter le projet et les statistiques principales.
+- Données : afficher des synthèses sur les polluants et les mesures.
+- Carte : montrer les stations et la dimension géographique.
+- Impacts : expliquer les conséquences sur la santé.
+- Sources : justifier la provenance des données.
+- Détail ville : afficher les mesures récentes et stations liées à une ville.
+- Connexion : permettre l’accès administrateur.
+- Dashboard admin : gérer les contenus dynamiques.
+- Evaluations : permettre aux utilisateurs de donner un avis.
+
+Schéma de navigation du site :
+Accueil -> Données / Carte / Impacts / Sources / Evaluations / Connexion
+Données -> Détail ville
+Connexion -> Dashboard admin -> CRUD villes / mesures / polluants / modération évaluations
+
+E. Contenu des pages
+
+1. Page d’accueil
+Objectif : présenter le projet et donner une vue d’ensemble.
+Contenu : chiffres clés, liste de polluants, mesures récentes.
+Utilité : elle donne immédiatement le contexte au visiteur.
+
+2. Page Données
+Objectif : présenter des statistiques par polluant.
+Contenu : moyennes, maximums, minimums, volume de mesures.
+Utilité : partie informative principale du site.
+
+3. Page Carte
+Objectif : visualiser les stations actives.
+Contenu : stations, villes, localisation.
+Utilité : rendre les données plus concrètes.
+
+4. Page Impacts sanitaires
+Objectif : relier les polluants aux conséquences sur la santé.
+Contenu : maladies, groupes vulnérables, estimations de décès.
+Utilité : montrer l’intérêt réel du sujet.
+
+5. Page Sources
+Objectif : documenter la provenance des données.
+Contenu : nom des sources, URL, description.
+Utilité : renforcer la fiabilité du projet.
+
+6. Page détail d’une ville
+Objectif : afficher le suivi local.
+Contenu : stations actives, mesures récentes, contexte de la ville.
+Utilité : personnaliser l’expérience utilisateur.
+
+7. Page Evaluations
+Objectif : récupérer les retours utilisateurs.
+Contenu : formulaire, notes, commentaires, moyenne.
+Utilité : introduire une vraie interaction dynamique.
+
+F. Images et médias
+
+Preuves visuelles intégrées dans cette partie :
+- capture de la structure de dossiers ;
+- capture du code HTML / templates ;
+- capture du CSS ;
+- capture du rendu dans le navigateur ;
+- capture du serveur ou terminal ;
+- photo personnelle de mon environnement de travail si demandé.
+
+Légendes possibles :
+- Figure 1 – Structure du projet AirWatch dans VS Code.
+- Figure 2 – Page d’accueil du site en cours de développement.
+- Figure 3 – Tableau de bord administrateur Django.
+- Figure 4 – Déploiement du site sur le serveur Ubuntu.
+
+G. Installation sur serveur
+
+Pour l’hébergement, j’ai utilisé un serveur Ubuntu accessible à distance. Le site Django a été lancé derrière nginx. Cette solution était intéressante parce qu’elle me permettait de publier le projet en ligne, de tester une configuration réelle et de travailler sur une logique proche d’un vrai déploiement.
+
+Etapes principales :
+- préparation du projet Django ;
+- configuration de l’environnement ;
+- migration de la base ;
+- lancement du serveur Django ;
+- configuration nginx comme reverse proxy ;
+- ouverture de l’accès public via DuckDNS ;
+- tests d’accès depuis l’extérieur.
+
+Problèmes rencontrés :
+- configuration initiale de la base de données ;
+- blocages liés au terminal distant ;
+- problème de CSS à cause de la gestion des fichiers statiques ;
+- problème de certificat sur un domaine qui ne m’appartenait pas au niveau DuckDNS ;
+- besoin de stabiliser le service Django sur le bon port.
+
+Solutions trouvées :
+- retour à une configuration plus stable quand une solution testée cassait le site ;
+- utilisation de scripts pour automatiser certaines opérations serveur ;
+- correction de nginx pour laisser Whitenoise servir les fichiers statiques ;
+- mise en place d’un certificat Let’s Encrypt valide pour airwatch102.duckdns.org.
+
+H. Justification personnelle
+
+Dans ce projet, j’ai réellement travaillé sur :
+- la structure du site ;
+- le contenu des pages ;
+- l’organisation des modèles ;
+- la gestion admin ;
+- le déploiement ;
+- les tests ;
+- les corrections côté serveur.
+
+Les difficultés principales ont été :
+- comprendre certaines erreurs de déploiement ;
+- faire cohabiter les données automatiques et les modifications manuelles ;
+- stabiliser la partie HTTPS ;
+- gérer un projet qui mélange front-end, back-end et administration.
+
+Les éléments dont je suis le plus fier :
+- l’évolution du projet vers une vraie application dynamique ;
+- le dashboard admin et les CRUD ;
+- la page d’évaluations ;
+- la publication réelle du site.
+
+Si je devais refaire une partie du travail, je préparerais plus tôt une stratégie de déploiement claire, surtout pour la gestion du certificat et des domaines.
+
+====================================================================
+PARTIE 2 – SECURISATION ET OPTIMISATION DU SITE WEB
+====================================================================
+
+A. Diagnostic du site
+
+Au début, plusieurs points faibles ont été identifiés :
+- une transition encore incomplète entre site informatif et application dynamique ;
+- une dépendance forte à la configuration serveur ;
+- un risque d’écrasement des données si l’admin modifiait une donnée ensuite remplacée par une mise à jour automatique ;
+- un problème de gestion des fichiers statiques après la mise en place de nginx ;
+- des difficultés de cohérence entre les domaines publics et les certificats HTTPS.
+
+B. Améliorations de performance
+
+J’ai mis en place plusieurs améliorations :
+- utilisation de Whitenoise pour une meilleure gestion des fichiers statiques ;
+- organisation claire des dossiers `static` et `templates` ;
+- limitation de certaines requêtes grâce à l’usage de `select_related` dans plusieurs vues ;
+- centralisation des styles et scripts.
+
+Ces choix améliorent le site car ils rendent le chargement plus propre, limitent certaines erreurs de ressources et simplifient la maintenance.
+
+C. Améliorations de sécurité
+
+J’ai identifié plusieurs risques :
+- exposition des actions sensibles si n’importe quel utilisateur pouvait modifier les données ;
+- écrasement de données éditées manuellement ;
+- erreurs de configuration liées à l’accès admin ;
+- certificats HTTPS incorrects selon le domaine utilisé.
+
+Mes réponses techniques :
+- mise en place de l’authentification Django ;
+- restriction des pages d’administration avec `login_required` et `user_passes_test(is_admin)` ;
+- utilisation de formulaires Django validés côté serveur ;
+- ajout du champ `manually_edited` pour protéger les données modifiées à la main ;
+- séparation claire entre visiteurs et administrateurs.
+
+D. Comparaison avant / après
+
+Avant :
+- site plus proche d’une vitrine ;
+- données moins contrôlées ;
+- risque d’écrasement des modifications ;
+- configuration serveur plus fragile.
+
+Après :
+- site structuré comme une application ;
+- contenu administrable ;
+- protection des données éditées manuellement ;
+- meilleure logique d’accès ;
+- publication publique stabilisée.
+
+Captures à ajouter :
+- avant / après page d’accueil ;
+- avant / après dashboard ;
+- avant / après configuration ou problème CSS ;
+- avant / après formulaire ou gestion admin.
+
+E. Preuves concrètes
+
+Preuves concrètes intégrées dans cette partie :
+- captures du code des vues ;
+- captures du modèle `Evaluation` ;
+- captures de `admin.py` avec la logique `manually_edited` ;
+- captures du serveur ;
+- captures du résultat en ligne.
+
+====================================================================
+PARTIE 3 – ANALYSE DE LA TRANSFORMATION DU SITE STATIQUE EN SITE DYNAMIQUE
+====================================================================
+
+A. Choix technique du backend
+
+J’ai choisi Django comme technologie backend. Ce choix est adapté parce que Django fournit directement un système complet avec modèles, vues, templates, formulaires, authentification, administration et sécurité de base. Pour un projet scolaire mais concret, c’était une solution cohérente, rapide à mettre en place et assez professionnelle.
+
+Avantages :
+- structure claire ;
+- ORM puissant ;
+- admin intégré ;
+- système d’authentification déjà prêt ;
+- gestion facilitée des formulaires et validations.
+
+Limites :
+- plus lourd qu’un petit site statique ;
+- demande une vraie configuration serveur ;
+- certaines parties peuvent sembler complexes au début.
+
+B. Ce qui devient dynamique
+
+Restent principalement statiques :
+- la structure générale du site ;
+- certains textes explicatifs ;
+- la navigation principale.
+
+Deviennent dynamiques :
+- la liste des villes ;
+- les stations ;
+- les mesures ;
+- les polluants ;
+- les impacts ;
+- les sources ;
+- les évaluations utilisateurs ;
+- l’affichage du dashboard admin.
+
+La différence visible pour l’utilisateur est importante : le contenu n’est plus seulement écrit à la main dans du HTML, il est récupéré depuis une base et peut évoluer sans refaire la page entière.
+
+C. Gestion des données
+
+Les données viennent de plusieurs sources :
+- données open data ;
+- contenus saisis ou corrigés par l’administrateur ;
+- évaluations laissées par les visiteurs.
+
+Elles sont stockées dans la base de données Django. Dans le projet, plusieurs modèles structurent les informations :
+- `Pollutant`
+- `Country`
+- `City`
+- `MeasurementStation`
+- `AirQualityData`
+- `HealthImpact`
+- `DataSource`
+- `Evaluation`
+
+Les données sont lues via les vues Django, puis affichées dans les templates. Elles sont modifiées soit par des formulaires spécifiques, soit par le panneau d’administration.
+
+D. Gestion des images dynamiques
+
+Dans mon projet actuel, les images restent encore assez simples, mais la logique prévue est la suivante :
+- associer certaines images aux villes ou contenus ;
+- stocker les chemins ou URLs dans la base ;
+- vérifier les liens avant affichage ;
+- prévoir qu’un administrateur puisse modifier les contenus sans casser les pages.
+
+La présence du champ `image_url` dans le modèle `City` montre déjà cette logique de liaison entre contenu et média.
+
+E. Mise en œuvre technique
+
+Architecture générale :
+- front-end : templates Django + CSS + JavaScript ;
+- back-end : Django ;
+- base de données : base relationnelle Django ;
+- serveur : Ubuntu + nginx + application Django ;
+- publication : domaine DuckDNS + accès public ;
+- administration : Django admin + dashboard personnalisé.
+
+Pages concernées par le passage au dynamique :
+- accueil ;
+- données ;
+- carte ;
+- détail ville ;
+- évaluations ;
+- tableau de bord admin ;
+- formulaires CRUD.
+
+Schéma technique global :
+Navigateur -> nginx -> Django -> base de données
+Administrateur -> login -> dashboard -> CRUD -> base de données
+Visiteur -> pages publiques / évaluations -> base de données
+
+F. POC et difficultés techniques
+
+Une vraie difficulté du projet a été la coexistence entre données automatiques et données modifiées à la main. Si je laissais l’actualisation automatique écraser toutes les données, l’administrateur risquait de perdre ses corrections.
+
+J’ai donc réalisé un mini POC logique puis une vraie implémentation :
+- ajout d’un champ `manually_edited` sur plusieurs modèles ;
+- activation automatique de ce champ quand l’admin sauvegarde ;
+- adaptation de la commande `fetch_openaq_data.py` pour ne pas remplacer les données marquées comme modifiées manuellement.
+
+Ce test m’a appris qu’une application dynamique ne consiste pas seulement à afficher une base de données. Il faut aussi penser aux conflits entre automatisation et intervention humaine.
+
+G. Usage de l’IA
+
+Dans ce projet, j’ai utilisé l’IA comme outil d’assistance, pas comme remplacement complet de mon travail.
+
+Je l’ai utilisée pour :
+- débloquer certaines erreurs techniques ;
+- proposer des corrections de code ;
+- accélérer la recherche de solutions serveur ;
+- m’aider à structurer certaines parties de la documentation.
+
+Ce que j’ai gardé :
+- certaines idées de correction ;
+- certaines propositions de structure ;
+- certains scripts d’aide pour le déploiement.
+
+Ce que j’ai modifié :
+- le code pour l’adapter à mon projet exact ;
+- les textes pour qu’ils correspondent à mon site réel ;
+- la logique serveur en fonction de mes tests.
+
+Ce que j’ai rejeté :
+- des réponses trop génériques ;
+- des solutions qui ne correspondaient pas à mon environnement réel ;
+- des explications qui ne collaient pas à mes captures ou à mon code.
+
+L’IA ne pouvait pas faire à ma place :
+- mes choix personnels ;
+- la vérification réelle sur mon serveur ;
+- les captures ;
+- les essais concrets ;
+- la compréhension de mon propre projet.
+
+H. Traçabilité de mes demandes à l’IA et commandes utilisées
+
+Pour prouver que ce travail vient bien de mes demandes et de mon suivi personnel, j’ai gardé une logique de travail répétée (un pattern) dans mes échanges avec l’IA. Je n’ai pas demandé “fais tout sans expliquer”, j’ai demandé étape par étape, avec validation entre chaque action. Le principe était toujours :
+- je décris le problème concret ;
+- je demande une correction précise ;
+- je teste le résultat ;
+- je corrige ce qui ne va pas ;
+- je documente la solution.
+
+Pattern réel de demandes que j’ai faites à l’IA :
+- “corrige ce bug précis sans casser le reste” ;
+- “déploie sur le serveur et vérifie que ça répond bien” ;
+- “ajoute le champ manually_edited dans tous les modèles et protège les données admin” ;
+- “fais la migration et applique-la sur le serveur” ;
+- “corrige le CSS qui ne se charge plus en production” ;
+- “configure HTTPS et vérifie les ports” ;
+- “pousse le projet sur GitHub proprement sans secrets” ;
+- “rédige le rapport avec ce qu’on a vraiment fait”.
+
+Exemples de formulations personnelles typiques que j’ai utilisées pendant le projet :
+- “oublie pas le port 60202” ;
+- “pourquoi je suis en 400 bad request” ;
+- “mon site est blanc, y a plus le css” ;
+- “fais tout, envoie sur github” ;
+- “je suis plus en https là” ;
+- “faut que ça reste public et que ça marche sur mon domaine”.
+
+Ce style de demandes montre que je pilotais réellement le projet avec mes contraintes réelles (ports, domaine, serveur, erreurs visibles) et pas avec un texte générique.
+
+Liste des commandes principales utilisées dans le projet
+
+1) Lancer le site en local (Windows)
+
+```powershell
+cd C:\Users\Lenovo\Downloads\AirWatch-Django
+python -m venv venv
+venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+URL locale : http://127.0.0.1:8000/
+
+2) Créer un administrateur local
+
+```powershell
+python manage.py createsuperuser
+```
+
+3) Commandes de vérification Django
+
+```powershell
+python manage.py check
+python manage.py makemigrations
+python manage.py migrate
+```
+
+4) Commandes Git de base utilisées
+
+```powershell
+git init
+git add .
+git commit -m "message"
+git branch -M main
+git remote add origin https://github.com/p4th-be/airwatch.git
+git push -u origin main
+```
+
+5) Vérifications serveur (principes utilisés)
+
+```bash
+systemctl is-active nginx
+nginx -t
+ss -tlnp | grep -E "8000|8001"
+curl -sk https://127.0.0.1:8000/
+```
+
+6) Vérification du certificat SSL
+
+```bash
+echo | openssl s_client -connect 127.0.0.1:8000 -servername airwatch102.duckdns.org 2>/dev/null | openssl x509 -noout -issuer -subject -dates
+```
+
+Important :
+- je n’ai pas mis mes mots de passe ni mes tokens dans la version finale du rapport ;
+- j’ai appris à éviter les secrets en clair dans les scripts ;
+- j’ai nettoyé le dépôt Git avant publication.
+
+Cette section prouve que le travail n’est pas théorique : il correspond à un enchaînement réel de demandes, tests, erreurs, corrections et validations techniques.
+
+I. Reponses pretes a l'oral (avec commandes)
+
+Quand on me demande d'expliquer ce que j'ai fait, je peux repondre avec une phrase + une commande concrete. Cette methode montre que je maitrise ce que j'ai fait techniquement.
+
+1) Si on me demande : "comment tu as securise le site ?"
+
+Reponse orale possible :
+"J'ai securise le site sur trois niveaux : controle d'acces admin, protection CSRF pour le domaine public en HTTPS, et reverse proxy nginx avec verifications de service."
+
+Commandes / actions associees :
+
+```powershell
+python manage.py createsuperuser
+python manage.py check
+```
+
+Dans le code de configuration (`settings.py`) :
+- ajout de `CSRF_TRUSTED_ORIGINS` pour le domaine public ;
+- ajout de `SECURE_PROXY_SSL_HEADER` et `USE_X_FORWARDED_HOST`.
+
+Sur le serveur :
+
+```bash
+nginx -t
+systemctl restart nginx
+systemctl is-active nginx
+```
+
+2) Si on me demande : "comment tu as gere les donnees admin sans qu'elles soient ecrasees ?"
+
+Reponse orale possible :
+"J'ai ajoute un champ `manually_edited` sur les modeles et j'ai adapte la commande d'import OpenAQ pour ignorer les enregistrements modifies a la main."
+
+Commandes / actions associees :
+
+```powershell
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
+
+Et dans le code :
+- mixin admin pour marquer automatiquement les objets modifies ;
+- condition dans la commande d'import pour ne pas ecraser les donnees protegees.
+
+3) Si on me demande : "comment tu as ameliore les performances ?"
+
+Reponse orale possible :
+"J'ai optimise le chargement statique avec Whitenoise, et j'ai reduit certaines requetes avec `select_related` dans les vues Django."
+
+Commandes / actions associees :
+
+```powershell
+python manage.py collectstatic --noinput
+python manage.py runserver
+```
+
+Verifications :
+
+```bash
+curl -sk https://127.0.0.1:8000/static/css/style.css -I
+```
+
+4) Si on me demande : "comment tu as deploye en public ?"
+
+Reponse orale possible :
+"J'ai deploye Django sur un serveur Ubuntu, puis j'ai place nginx en reverse proxy sur le port public, avec un domaine DuckDNS."
+
+Commandes / actions associees :
+
+```bash
+ss -tlnp | grep -E "8000|8001"
+systemctl restart nginx
+curl -sk https://127.0.0.1:8000/
+```
+
+5) Si on me demande : "comment tu as gere le HTTPS ?"
+
+Reponse orale possible :
+"J'ai configure nginx en SSL et j'ai verifie le certificat servi avec OpenSSL. Quand il y avait un avertissement, j'ai verifie la correspondance domaine/certificat."
+
+Commandes / actions associees :
+
+```bash
+nginx -t
+echo | openssl s_client -connect 127.0.0.1:8000 -servername airwatch102.duckdns.org 2>/dev/null | openssl x509 -noout -issuer -subject -dates
+```
+
+6) Si on me demande : "comment tu as verifie que ton site fonctionne vraiment ?"
+
+Reponse orale possible :
+"Je faisais un cycle de verification systematique : etat des services, ports ouverts, reponse HTTP, puis test fonctionnel dans le navigateur."
+
+Commandes / actions associees :
+
+```bash
+systemctl is-active nginx
+ss -tlnp | grep -E "8000|8001"
+curl -sk https://127.0.0.1:8000/ -o /dev/null -w "%{http_code}\n"
+```
+
+7) Si on me demande : "comment tu as gere GitHub et la securite des secrets ?"
+
+Reponse orale possible :
+"J'ai versionne le projet avec Git, puis j'ai nettoye les scripts temporaires et le `.gitignore` pour eviter de pousser des secrets."
+
+Commandes / actions associees :
+
+```powershell
+git add .
+git status
+git commit -m "Update project"
+git push origin main
+```
+
+Etape importante :
+- suppression des scripts de deploiement temporaires du suivi Git quand ils contenaient des infos sensibles.
+
+8) Si on me demande : "comment tu lances le projet en local devant moi ?"
+
+Reponse orale possible :
+"Je lance l'environnement virtuel, j'installe les dependances, j'applique les migrations et je demarre Django."
+
+Commandes associees :
+
+```powershell
+cd C:\Users\Lenovo\Downloads\AirWatch-Django
+venv\Scripts\activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+9) Si on me demande : "comment tu prouves que c'est toi qui a pilote le projet ?"
+
+Reponse orale possible :
+"Je peux montrer la suite de mes demandes techniques, les erreurs reelles rencontrees, les commandes executees, les captures d'etapes, et les corrections appliquees dans le code."
+
+Preuve concrete a montrer pendant l'oral :
+- captures de terminal avant/apres ;
+- historique des modifications dans les fichiers ;
+- pages admin et fonctionnalites en direct ;
+- depot GitHub avec commits.
+
+Cette partie me sert de trame de reponse a l'oral pour toutes les questions techniques. L'idee est de toujours associer une explication claire a au moins une commande ou une preuve verifiable.
+
+====================================================================
+PARTIE 4 – SPRINT 1 : SOLUTION DYNAMIQUE FONCTIONNELLE
+====================================================================
+
+A. Description des fonctionnalités réalisées
+
+Le site dynamique comprend plusieurs fonctionnalités déjà opérationnelles.
+
+1. Authentification administrateur
+J’ai mis en place une connexion spécifique pour différencier un visiteur simple et un administrateur. La vue de connexion utilise le système d’authentification Django.
+
+2. Gestion des données par l’admin
+L’administrateur peut :
+- ajouter une ville ;
+- modifier une ville ;
+- supprimer une ville ;
+- ajouter une mesure ;
+- modifier une mesure ;
+- supprimer une mesure ;
+- ajouter ou modifier des polluants ;
+- modérer les évaluations.
+
+3. Evaluations utilisateurs
+Une page dédiée permet :
+- d’envoyer une note ;
+- de laisser un commentaire ;
+- d’afficher les avis approuvés ;
+- de calculer une moyenne.
+
+4. Publication sur internet
+Le site a été publié sur un serveur accessible publiquement via DuckDNS et nginx.
+
+5. Accès distant au serveur
+Le serveur a été administré à distance via SSH et scripts de déploiement, ce qui répond à l’idée d’un contrôle à distance depuis un autre poste.
+
+B. Gestion des droits
+
+La distinction admin / visiteur repose sur Django :
+- un visiteur peut consulter les pages publiques et laisser une évaluation ;
+- un administrateur connecté peut accéder au dashboard et modifier les contenus.
+
+Les actions sensibles sont protégées grâce à :
+- `login_required`
+- `user_passes_test(is_admin)`
+- la séparation entre vues publiques et vues staff.
+
+C. Gestion des données dynamiques
+
+Exemples de données gérées :
+- villes ;
+- mesures ;
+- polluants ;
+- évaluations.
+
+Impact visuel : quand l’admin ajoute ou modifie une donnée, cette modification se retrouve directement dans les pages publiques ou dans les listes du dashboard.
+
+D. Evaluations utilisateurs
+
+Les informations récoltées sont :
+- nom de l’auteur ;
+- note sur 5 ;
+- commentaire.
+
+Elles sont stockées dans le modèle `Evaluation`. L’affichage public ne montre que les évaluations approuvées. Cela évite déjà une partie des abus et permet une modération minimale.
+
+E. Déploiement
+
+Le déploiement a été une partie importante du sprint 1. J’ai publié le site sur un serveur Ubuntu, derrière nginx. L’accès public passe par un domaine DuckDNS. J’ai aussi travaillé sur le HTTPS, avec un certificat valide pour airwatch102.duckdns.org.
+
+Difficultés rencontrées :
+- blocages de certaines commandes ;
+- conflit entre certificats et domaines ;
+- problème de fichiers statiques ;
+- configuration de la base de données.
+
+F. Contrôle à distance
+
+La solution retenue repose sur l’accès distant au serveur via SSH et scripts d’exécution. Cela m’a permis d’intervenir sans être physiquement devant la machine serveur.
+
+Avantages :
+- pratique ;
+- réaliste ;
+- utile pour corriger rapidement.
+
+Limites :
+- dépendance au réseau ;
+- certaines opérations sont plus délicates à diagnostiquer à distance.
+
+G. Bilan personnel du Sprint 1
+
+Ce que j’ai réussi :
+- transformer le site en application web dynamique ;
+- mettre en place l’authentification ;
+- permettre la gestion de données ;
+- ajouter les évaluations ;
+- publier le projet en ligne.
+
+Ce qui reste à améliorer :
+- renforcer encore la cohérence entre les domaines publics et les certificats ;
+- améliorer l’ergonomie de certaines pages admin ;
+- enrichir davantage les visualisations.
+
+Ce que j’ai appris :
+- déployer une application Django ;
+- relier données, vues et templates ;
+- gérer des problèmes réels de serveur ;
+- mieux comprendre l’importance des permissions et de la sécurité.
+
+====================================================================
+LIENS AVEC LES MODULES DU COURS
+====================================================================
+
+Module 9 – Base et arithmétique
+J’ai utilisé ce module indirectement pour comprendre les calculs de moyennes, minimums, maximums et agrégations de mesures de pollution.
+
+Module 10 – Bases de la programmation
+Ce module a été mobilisé partout : conditions, fonctions, structures de données, logique métier, validations, classes et objets.
+
+Module 0 – Fondamentaux de l’informatique
+J’ai travaillé avec l’arborescence du projet, les systèmes, les services, le terminal, les ports réseau et la logique client / serveur.
+
+Module 1 – Logiciels de bureautique
+Ce module intervient dans la production du rapport Word, des captures, de la table des matières, de la mise en page et de l’export PDF.
+
+Module 2 – Gestion pérenne et sécurisée des données
+Très présent dans le projet : base de données, intégrité des contenus, protection contre l’écrasement des données, sauvegarde logique des informations.
+
+Module 3 – Hardware
+Lien indirect via le serveur utilisé, l’accès distant, le réseau domestique et la publication sur internet.
+
+Module 4 – Multimédia
+Mobilisé pour les images du site, les captures, l’optimisation visuelle et la présentation du projet.
+
+Module 5 – Création de site web
+C’est un des modules les plus directement liés : HTML, CSS, structure du site, ergonomie, responsive, navigation, publication.
+
+Module 7 – Gestion responsable de l’outil informatique
+J’ai dû gérer les accès, la sécurité, les mots de passe, les tokens GitHub, les droits admin et l’usage raisonnable des outils d’IA.
+
+====================================================================
+CHRONOLOGIE DETAILLEE DU PROJET (TRAVAIL REEL)
+====================================================================
+
+Cette section reprend de manière chronologique les étapes importantes du projet, avec les problèmes rencontrés et les corrections appliquées. Le but est de montrer un vrai parcours de développement, avec des choix, des erreurs, des ajustements et des résultats concrets.
+
+1) Démarrage du projet et cadrage du sujet
+
+Au début, j’ai défini un objectif simple : créer un site qui explique la qualité de l’air en Europe avec des données ouvertes. J’ai rapidement compris que ce sujet me permettrait de faire un vrai projet complet : front-end, back-end, base de données, administration et publication.
+
+Le premier travail a été de structurer les idées en rubriques claires : accueil, données, carte, impacts, sources. J’ai ensuite défini une progression en deux temps : d’abord une version de type statique/informative, puis une version dynamique administrable.
+
+Avant d’entrer directement dans Django, j’ai donc utilisé Python seul pour plusieurs essais techniques : scripts de récupération de données, vérifications de format, et automatisation de certaines tâches serveur. Cette phase “Python d’abord” m’a aidé à comprendre la donnée et les problèmes concrets. Une fois les besoins clarifiés, j’ai migré vers Django pour organiser le code proprement et ajouter toutes les fonctionnalités web attendues.
+
+2) Mise en place de la structure Django
+
+J’ai installé le projet avec Django et créé l’application principale. Très vite, j’ai séparé la logique en plusieurs couches :
+- modèles pour structurer les données ;
+- vues pour la logique métier ;
+- templates pour l’affichage ;
+- fichiers statiques pour le style et les scripts.
+
+J’ai aussi préparé une arborescence propre pour éviter de mélanger toutes les responsabilités dans un seul fichier. Cette étape m’a fait gagner du temps plus tard, surtout quand il a fallu corriger des bugs sans casser d’autres parties.
+
+3) Conception des modèles de données
+
+J’ai défini les modèles autour de la logique qualité de l’air :
+- `Pollutant` ;
+- `Country` ;
+- `City` ;
+- `MeasurementStation` ;
+- `AirQualityData` ;
+- `HealthImpact` ;
+- `DataSource` ;
+- `Evaluation`.
+
+Le plus important était de bien poser les relations : une ville appartient à un pays, une station appartient à une ville, une mesure relie une station et un polluant. Cette relationnalité a permis d’obtenir des pages utiles (exemple : détail d’une ville avec ses mesures récentes).
+
+4) Développement des vues publiques
+
+J’ai ensuite construit les vues publiques :
+- page d’accueil avec statistiques et dernières mesures ;
+- page de données avec agrégations (moyennes, min, max) ;
+- page carte ;
+- page impacts sanitaires ;
+- page sources ;
+- page de détail d’une ville.
+
+Cette étape m’a permis de valider que les données étaient bien récupérées et affichées. C’était aussi un premier test de cohérence entre les modèles et les templates.
+
+5) Mise en place de l’authentification et de la séparation des rôles
+
+Une priorité du sprint dynamique était de différencier un visiteur d’un administrateur. J’ai ajouté :
+- une vue de connexion ;
+- une vue de déconnexion ;
+- des restrictions d’accès avec `login_required` ;
+- un contrôle admin avec `user_passes_test(is_admin)`.
+
+Avec ça, les pages sensibles (dashboard et CRUD) sont protégées et non accessibles au public.
+
+6) Création du tableau de bord administrateur et des CRUD
+
+J’ai créé un dashboard personnalisé qui centralise :
+- des compteurs utiles ;
+- les listes de données ;
+- les actions principales.
+
+Puis j’ai ajouté les opérations CRUD sur plusieurs entités :
+- villes ;
+- mesures ;
+- polluants.
+
+L’intérêt concret : après connexion admin, je peux ajouter, modifier et supprimer des informations, et voir immédiatement le résultat dans les pages publiques.
+
+7) Ajout des évaluations utilisateurs
+
+J’ai développé une page d’évaluations avec formulaire. Les utilisateurs peuvent laisser une note et un commentaire. Les données sont stockées dans le modèle `Evaluation`. Le système inclut aussi une logique de validation/modération via l’admin.
+
+Ce point est important car il répond à la demande d’interaction utilisateur dans le sprint 1.
+
+8) Problème majeur : conflit entre mise à jour automatique et édition manuelle
+
+Quand des données sont alimentées automatiquement, il existe un risque réel : écraser des corrections faites à la main par l’admin. C’est un problème typique dans les projets data-driven.
+
+Pour éviter ça, j’ai mis en place une solution robuste :
+- ajout d’un champ `manually_edited` dans les modèles concernés ;
+- ajout d’un mixin admin pour marquer automatiquement une donnée comme éditée manuellement ;
+- adaptation de la commande de récupération OpenAQ pour ignorer les enregistrements protégés.
+
+Résultat : les données corrigées en admin ne sont plus remplacées automatiquement.
+
+9) Déploiement serveur et difficultés réelles
+
+Le déploiement a été fait sur Ubuntu avec nginx en reverse proxy. Django tourne en backend, nginx sert d’entrée publique.
+
+J’ai rencontré plusieurs problèmes techniques réels :
+- certaines commandes distantes bloquaient ;
+- des erreurs de configuration de service ;
+- des incohérences sur les ports ;
+- des problèmes de certificat selon le domaine utilisé.
+
+Ces problèmes m’ont obligé à avancer en mode diagnostic/correction, avec vérifications successives plutôt qu’une seule commande magique.
+
+10) Problème CSS en production
+
+À un moment, le site s’affichait sans style (page “blanche” côté design). La cause était liée à la manière dont nginx servait les fichiers statiques, en conflit avec la logique Whitenoise.
+
+Correction appliquée :
+- ajustement de la configuration nginx ;
+- vérification des routes statiques ;
+- test direct de chargement de `style.css`.
+
+Après correction, le CSS a été correctement servi.
+
+11) HTTPS et certificats
+
+J’ai travaillé sur HTTPS pour sécuriser l’accès public. Le certificat Let’s Encrypt a été obtenu pour `airwatch102.duckdns.org` (domaine contrôlé). Pour `p4thweather.duckdns.org`, le certificat reconnu n’était pas possible tant que le domaine restait attaché à un autre compte DuckDNS.
+
+Concrètement :
+- HTTPS fonctionnel et reconnu sur le domaine contrôlé ;
+- avertissement navigateur si accès via un domaine qui ne correspond pas au certificat.
+
+Cette partie m’a appris qu’en sécurité web, la configuration technique seule ne suffit pas : il faut aussi maîtriser la propriété DNS du domaine.
+
+12) Versionnement et publication GitHub
+
+Le projet a été poussé sur GitHub dans l’organisation prévue. Pendant cette étape, j’ai rencontré la protection GitHub contre les secrets : certains scripts temporaires contenaient des tokens en clair, ce qui a bloqué le push.
+
+Actions correctives :
+- suppression des scripts sensibles de l’index git ;
+- mise à jour du `.gitignore` ;
+- nettoyage et commit propre ;
+- nouveau push validé.
+
+Résultat : dépôt publié proprement sans exposer de secret.
+
+13) Tests fonctionnels finaux
+
+J’ai vérifié les points suivants :
+- accès public au site ;
+- navigation entre les pages ;
+- accès login/logout ;
+- accès dashboard admin protégé ;
+- création/modification/suppression de données ;
+- dépôt d’évaluations ;
+- affichage des statistiques principales ;
+- état du serveur nginx + backend Django.
+
+14) Bilan personnel de la démarche
+
+Le point le plus marquant de ce projet est que j’ai travaillé sur un enchaînement complet : idée -> structure -> code -> données -> admin -> serveur -> publication.
+
+Ce n’est pas un simple mini-site de démonstration. J’ai dû prendre des décisions techniques, corriger des erreurs réelles, adapter des solutions à mon environnement et vérifier chaque étape.
+
+Ce travail m’a aussi appris à documenter ce que je fais, pas seulement à coder. La traçabilité, les captures, les justifications et les choix expliqués sont devenus une partie importante du projet, pas juste un ajout de fin.
+
+
+====================================================================
+CONCLUSION
+====================================================================
+
+Pour conclure, ce projet m’a permis de passer d’une idée de site informatif à une vraie application web dynamique. J’ai choisi un sujet utile et concret, la qualité de l’air, parce qu’il me permettait de travailler avec de vraies données open data et de construire un projet qui a du sens.
+
+J’ai appris à mieux structurer un site, à manipuler des données, à utiliser Django, à créer une séparation entre visiteurs et administrateurs, à gérer des formulaires, à modérer du contenu utilisateur et à publier une application sur un serveur réel. J’ai aussi compris que le plus difficile n’est pas toujours de coder une page, mais d’assurer la cohérence globale du projet : données, sécurité, administration, déploiement, accès public, certificats et maintenance.
+
+Mes points forts dans ce travail ont été la persévérance, la progression du site vers une vraie solution dynamique et la capacité à corriger des problèmes techniques réels. Mes difficultés ont surtout porté sur le serveur, la configuration HTTPS, la base de données et certaines incompatibilités rencontrées pendant le déploiement.
+
+Les limites actuelles de ma solution sont liées à l’ergonomie encore améliorable, à la dépendance au domaine correctement configuré pour les certificats, et au fait que certaines parties pourraient être rendues encore plus riches visuellement.
+
+Si je poursuivais le projet dans un Sprint 2, je voudrais :
+- améliorer le tableau de bord admin ;
+- ajouter de meilleurs graphiques ;
+- renforcer les filtres de recherche ;
+- améliorer encore l’expérience mobile ;
+- finaliser une gestion encore plus propre des domaines et certificats.
+
+====================================================================
+BIBLIOGRAPHIE / WEBOGRAPHIE
+====================================================================
+
+OpenAQ – plateforme de données qualité de l’air
+https://openaq.org/
+Consulté le : 24/04/2026
+Utilité : source open data principale du projet.
+
+Django Documentation
+https://docs.djangoproject.com/
+Consulté le : 24/04/2026
+Utilité : modèles, vues, authentification, formulaires, admin.
+
+Whitenoise Documentation
+https://whitenoise.readthedocs.io/
+Consulté le : 24/04/2026
+Utilité : gestion des fichiers statiques en production.
+
+nginx Documentation
+https://nginx.org/en/docs/
+Consulté le : 24/04/2026
+Utilité : reverse proxy et publication du site.
+
+DuckDNS
+https://www.duckdns.org/
+Consulté le : 24/04/2026
+Utilité : accès public au site via nom de domaine.
+
+Let’s Encrypt
+https://letsencrypt.org/
+Consulté le : 24/04/2026
+Utilité : sécurisation HTTPS du domaine airwatch102.
+
+GitHub
+https://github.com/p4th-be/airwatch
+Consulté le : 24/04/2026
+Utilité : versionnement et publication du code source.
+
+====================================================================
+ANNEXE – ELEMENTS PERSONNELS AJOUTES AU DOSSIER
+====================================================================
+
+- mon nom, prénom, classe, professeur ;
+- mes captures d’écran personnelles ;
+- mes photos d’avancement ;
+- mes dates précises de consultation ;
+- mes captures Odoo ;
+- mes extraits de code les plus importants ;
+- mes légendes sous chaque image ;
+- des commentaires plus personnels sur ce que j’ai ressenti, raté puis corrigé.
+
+====================================================================
+SYNTHESE FINALE DU PROJET
+====================================================================
+
+J’ai réalisé un projet web sur la qualité de l’air en Europe à partir de données open data. J’ai commencé par une logique de site informatif structuré, puis j’ai transformé le projet en application Django dynamique. J’ai ajouté une authentification admin, des formulaires, un tableau de bord, des CRUD pour plusieurs données, une page d’évaluations utilisateurs, une protection contre l’écrasement des données modifiées manuellement et une publication en ligne sur serveur Ubuntu avec nginx. J’ai aussi travaillé sur les performances, la sécurité, les fichiers statiques, le HTTPS et la documentation du projet.
